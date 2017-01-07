@@ -1,0 +1,8 @@
+[package]
+name = "xkcdPass"
+version = "0.1.0"
+authors = ["Leo Khachatorians <leokhachatorians@gmail.com>"]
+
+[dependencies]
+docopt = "0.7"
+rustc-serialize = "0.3"
