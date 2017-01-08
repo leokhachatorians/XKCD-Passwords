@@ -47,10 +47,7 @@ fn main() {
     let mut word_vec: Vec<String> = Vec::new();
     let reader = BufReader::new(f);
     let lines: Result<Vec<_>, _> = reader.lines().collect();
-
-    for word in lines.unwrap() {
-        word_vec.push(word);
-    }
+    word_vec = lines.unwrap();
 
     for _ in 0..args.flag_n {
         let num = rand::thread_rng().gen_range(0, word_vec.len());
