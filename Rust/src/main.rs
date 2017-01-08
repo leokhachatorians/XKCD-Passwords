@@ -54,7 +54,7 @@ fn main() {
 
     for _ in 0..args.flag_n {
         let num = rand::thread_rng().gen_range(0, word_vec.len());
-        println!("{}", word_vec[num]);
+        print!("{} ", word_vec[num]);
     }
 
 }
