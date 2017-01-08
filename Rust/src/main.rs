@@ -9,15 +9,15 @@ use std::io::BufReader;
 use std::fs::File;
 //use std::vec::Vec;
 
-static DEFAULT_WORDLIST: &'static str = include_str!("words.txt");
+static DEFAULT_WORDLIST: &'static str = include_str!("../../wordlist.txt");
 const USAGE: &'static str = "
 Usage:
     genxkcd-pass [options] [-n <number>] [-p <path>]
 
 Options:
     -h --help
-    -n --number <number>                Number of words to generate
-    -p --path <path/to/wordlist.txt>    Override default wordlist
+    -n --number <number>                Number of words to generate [default: 5].
+    -p --path <path/to/wordlist.txt>    Override default wordlist [default: DEFAULT_WORDLIST].
 ";
 
 #[derive(Debug, RustcDecodable)]
@@ -38,35 +38,25 @@ fn main() {
     }
 
     println!("{:?}", args);
-    println!("{}", DEFAULT_WORDLIST);
 
-    let mut v: Vec<String> = Vec::new();
+    let f = match File::open("../../wordlist.txt") {
+        Ok(file) => file,
+        Err(e) => {
+            println!("{}",e);
+            process::exit(1);
+        }
+    };
 
-    let f = File::open("words.txt").unwrap()
+    let mut word_vec: Vec<String> = Vec::new();
+    let reader = BufReader::new(f);
+    let lines: Result<Vec<_>, _> = reader.lines().collect();
 
-    //let f = read_file();
-    //
-    
-   // let f = match File::open("words.txt") {
-   //     Ok(file) => file,
-   //     Err(e) => {
-   //         println!("{}",e);
-   //         process::exit(1);
-   //     }
-   // };
+    for word in lines.unwrap() {
+        word_vec.push(word);
+    }
 
+    for i in 0..args.flag_n as usize {
+        println!("{}", word_vec[i]);
+    }
 
-    //let lists = vec![DEFAULT_WORDLIST.to_string()];
-
-
-    //let mut reader = BufReader::new(f);
-
-   // for line in reader.lines() {
-   //     v.push(line);
-   // }
-}
-
-fn read_file() -> Result<(), io::Error> {
-    let f = try!(File::open(DEFAULT_WORDLIST));
-    Ok(())
 }
