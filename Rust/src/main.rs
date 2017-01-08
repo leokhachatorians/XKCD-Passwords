@@ -1,15 +1,15 @@
 extern crate docopt;
 extern crate rustc_serialize;
+extern crate rand;
 
 use docopt::Docopt;
+use rand::Rng;
 use std::{process};
-use std::io;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
-//use std::vec::Vec;
 
-static DEFAULT_WORDLIST: &'static str = include_str!("../../wordlist.txt");
+//static DEFAULT_WORDLIST: &'static str = include_str!("../../wordlist.txt");
 const USAGE: &'static str = "
 Usage:
     genxkcd-pass [options] [-n <number>] [-p <path>]
@@ -55,8 +55,9 @@ fn main() {
         word_vec.push(word);
     }
 
-    for i in 0..args.flag_n as usize {
-        println!("{}", word_vec[i]);
+    for _ in 0..args.flag_n as usize {
+        let num = rand::thread_rng().gen_range(0, word_vec.len());
+        println!("{}", word_vec[num]);
     }
 
 }
