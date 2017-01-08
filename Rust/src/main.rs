@@ -9,22 +9,21 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 
-//static DEFAULT_WORDLIST: &'static str = include_str!("../../wordlist.txt");
 const USAGE: &'static str = "
 Usage:
     genxkcd-pass [options] [-n <number>] [-p <path>]
 
 Options:
     -h --help
-    -n --number <number>                Number of words to generate [default: 5].
-    -p --path <path/to/wordlist.txt>    Override default wordlist [default: DEFAULT_WORDLIST].
+    -n --number <number>                        Number of words to generate [default: 5].
+    -w --word-list <path/to/wordlist.txt>       Override default wordlist [default: ../wordlist.txt].
 ";
 
 #[derive(Debug, RustcDecodable)]
 struct Args {
     flag_h: bool,   // help menu
     flag_n: i32,    // number of words
-    flag_p: String, // any external wordlist
+    flag_w: String, // any external wordlist
 }
 
 fn main() {
@@ -37,12 +36,10 @@ fn main() {
         process::exit(1);
     }
 
-    println!("{:?}", args);
-
-    let f = match File::open("../../wordlist.txt") {
+    let f = match File::open(args.flag_w) {
         Ok(file) => file,
         Err(e) => {
-            println!("{}",e);
+            println!("{}", e);
             process::exit(1);
         }
     };
@@ -55,7 +52,7 @@ fn main() {
         word_vec.push(word);
     }
 
-    for _ in 0..args.flag_n as usize {
+    for _ in 0..args.flag_n {
         let num = rand::thread_rng().gen_range(0, word_vec.len());
         println!("{}", word_vec[num]);
     }
